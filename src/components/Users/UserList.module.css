@@ -25,3 +25,13 @@
   .user__control img{
    margin-left: 0;
   }
+.button{
+  margin: 2rem auto;
+  background: #8b005d;
+}
+@media (min-width: 768px) {
+  .button{
+    width:min-content;
+  }
+  
+}

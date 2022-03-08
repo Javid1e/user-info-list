@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Card from "../UI/Card";
 import Button from "../UI/Button";
+import ErrorModal from "../UI/ErrorModal";
 import styles from "./AddUser.module.css";
 import userIcon from "./Files/ProfilePicture/user.svg";
 const AddUser = (props) => {
@@ -14,6 +15,7 @@ const AddUser = (props) => {
   const [isValidUserAge, setIsValidUserAge] = useState(false);
   const [isValidUserNationalId, setIsValidUserNationalId] = useState(false);
   const [isValidUserGender, setIsValidUserGender] = useState(false);
+  const [error, setError] = useState();
 
   const userNameChangeHandler = (event) => {
     if (event.target.value.trim().length > 0) {
@@ -43,6 +45,10 @@ const AddUser = (props) => {
     setEntredUserGender(event.target.value);
     setIsValidUserGender(true);
   };
+  const errorReset = () => {
+    setError(null);
+  };
+
   const addUserHandler = (event) => {
     event.preventDefault();
     if (
@@ -52,9 +58,20 @@ const AddUser = (props) => {
       enteredUserNationalId.trim().length === 0 ||
       enteredUserGender.trim().length === 0
     ) {
+      setError({
+        title: "Invalid Input",
+        message: "Please Insert Valid Info(non-empty values)",
+      });
       return;
     }
-
+    if (+enteredUserAge < 1 || +enteredUserNationalId < 1) {
+      setError({
+        title: "Invalid Input",
+        message:
+          "Please Insert Valid Age And National Id(Age>0 ,National Id >0)",
+      });
+      return;
+    }
     props.onAddUser(
       enteredUserName,
       enteredUserLastName,
@@ -71,105 +88,124 @@ const AddUser = (props) => {
 
   return (
     <Card className={styles["new-user__controls"]}>
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onConfirm={errorReset}
+        ></ErrorModal>
+      )}
       <Card>
         <img src={userIcon} width="300px" alt="Prof"></img>
       </Card>
       <Card>
-      <form onSubmit={addUserHandler}>
-        <div className={`${styles["new-user__controls"]}`}>
-          <div
-            className={`${styles["new-user"]} ${
-              !isValidUserName && styles.invalid
-            }   }`}
-          >
-            <label htmlFor="userName">User Name : </label>
-            <input
-              id="userName"
-              type="text"
-              value={enteredUserName}
-              onChange={userNameChangeHandler}
-            ></input>
-          </div>
-          <div
-            className={`${styles["new-user"]} ${
-              !isValidUserLastName && styles.invalid
-            }   }`}
-          >
-            <label htmlFor="userLastName">User Last Name : </label>
-            <input
-              id="userLastName"
-              type="text"
-              value={enteredUserLastName}
-              onChange={userLastNameChangeHandler}
-            ></input>
-          </div>
-          <div
-            className={`${styles["new-user"]} ${
-              !isValidUserAge && styles.invalid
-            }   }`}
-          >
-            <label htmlFor="userAge">User Age : </label>
-            <input
-              id="userAge"
-              type="number"
-              value={enteredUserAge}
-              onChange={userAgeChangeHandler}
-            ></input>
-          </div>
-          <div
-            className={`${styles["new-user"]} ${
-              !isValidUserNationalId && styles.invalid
-            }   }`}
-          >
-            <label htmlFor="userNatinalId">User Natinal Id : </label>
-            <input
-              id="userNatinalId"
-              type="number"
-              value={enteredUserNationalId}
-              onChange={userNationalIdChangeHandler}
-            ></input>
-          </div>
-          <div className={`${styles["new-user__control"]}`}>
-            <div className={`${styles["new-user__control"]} ${!isValidUserGender && styles.invalid}`}>
-              <label>
-                <input
-                  type="radio"
-                  value="Male"
-                  name="userGender"
-                  checked={enteredUserGender === "Male"}
-                  onChange={userGenderChangeHandler}
-                />
-                Male
-              </label>
+        <form onSubmit={addUserHandler}>
+          <div className={`${styles["new-user__controls"]}`}>
+            <div
+              className={`${styles["new-user"]} ${
+                !isValidUserName && styles.invalid
+              }   }`}
+            >
+              <label htmlFor="userName">User Name : </label>
+              <input
+                id="userName"
+                type="text"
+                value={enteredUserName}
+                onChange={userNameChangeHandler}
+              ></input>
             </div>
-            <div className={`${styles["new-user__control"]} ${!isValidUserGender && styles.invalid}`}>
-              <label>
-                <input
-                  type="radio"
-                  value="Female"
-                  name="userGender"
-                  checked={enteredUserGender === "Female"}
-                  onChange={userGenderChangeHandler}
-                />
-                Female
-              </label>
+            <div
+              className={`${styles["new-user"]} ${
+                !isValidUserLastName && styles.invalid
+              }   }`}
+            >
+              <label htmlFor="userLastName">User Last Name : </label>
+              <input
+                id="userLastName"
+                type="text"
+                value={enteredUserLastName}
+                onChange={userLastNameChangeHandler}
+              ></input>
             </div>
-            <div className={`${styles["new-user__control"]} ${!isValidUserGender && styles.invalid}`}>
-              <label>
-                <input
-                  type="radio"
-                  value="Trans"
-                  name="userGender"
-                  checked={enteredUserGender === "Trans"}
-                  onChange={userGenderChangeHandler}
-                />
-                Trans
-              </label>
+            <div
+              className={`${styles["new-user"]} ${
+                !isValidUserAge && styles.invalid
+              }   }`}
+            >
+              <label htmlFor="userAge">User Age : </label>
+              <input
+                id="userAge"
+                type="number"
+                value={enteredUserAge}
+                onChange={userAgeChangeHandler}
+              ></input>
+            </div>
+            <div
+              className={`${styles["new-user"]} ${
+                !isValidUserNationalId && styles.invalid
+              }   }`}
+            >
+              <label htmlFor="userNatinalId">User Natinal Id : </label>
+              <input
+                id="userNatinalId"
+                type="number"
+                value={enteredUserNationalId}
+                onChange={userNationalIdChangeHandler}
+              ></input>
+            </div>
+            <div className={`${styles["new-user__control"]}`}>
+              <div
+                className={`${styles["new-user__control"]} ${
+                  !isValidUserGender && styles.invalid
+                }`}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    value="Male"
+                    name="userGender"
+                    checked={enteredUserGender === "Male"}
+                    onChange={userGenderChangeHandler}
+                  />
+                  Male
+                </label>
+              </div>
+              <div
+                className={`${styles["new-user__control"]} ${
+                  !isValidUserGender && styles.invalid
+                }`}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    value="Female"
+                    name="userGender"
+                    checked={enteredUserGender === "Female"}
+                    onChange={userGenderChangeHandler}
+                  />
+                  Female
+                </label>
+              </div>
+              <div
+                className={`${styles["new-user__control"]} ${
+                  !isValidUserGender && styles.invalid
+                }`}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    value="Trans"
+                    name="userGender"
+                    checked={enteredUserGender === "Trans"}
+                    onChange={userGenderChangeHandler}
+                  />
+                  Trans
+                </label>
+              </div>
             </div>
           </div>
-        </div>
-        <Button type="submit">Add User</Button>
-      </form>
+          <Button type="submit">Add User</Button>
+        </form>
       </Card>
     </Card>
   );
