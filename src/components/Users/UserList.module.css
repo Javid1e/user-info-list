@@ -1,0 +1,27 @@
+.users {
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 40rem;
+  }
+  
+  .users ul {
+    list-style: none;
+    padding: 1rem;
+  }
+  
+  .users li {
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+  }
+  .user__control{
+    display:flex;
+  }
+  .user__control label{
+    display: flex;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+  .user__control img{
+   margin-left: 0;
+  }
